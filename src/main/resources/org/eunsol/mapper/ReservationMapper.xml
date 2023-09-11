@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTO Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.eunsol.mapper.ReservationMapper">
+
+	<select id="getList" resultType="org.eunsol.domain.ReservationVO">
+		select * from Reservation
+	</select>
+	<insert id="insert">	
+		insert into Reservation(num, rnum, id, photo, name, viewday, viewday2, peoplenum, seatnum, vtime, paycd, price, total, filename, uploadpath, fullname, alt)
+		values(#{num}, seq_rnum.nextval, #{id}, #{photo}, #{name}, #{viewday}, #{viewday2}, #{peoplenum}, #{seatnum}, #{vtime}, #{paycd}, #{price}, #{total}, #{filename}, #{uploadpath}, #{fullname}, #{alt})
+	</insert>
+	<select id="read" resultType="org.eunsol.domain.ReservationVO">
+		select * from performance where rnum = #{rnum}	
+	</select>
+</mapper>

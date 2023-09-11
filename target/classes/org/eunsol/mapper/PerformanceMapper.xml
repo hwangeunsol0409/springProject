@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTO Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.eunsol.mapper.PerformanceMapper">
+	<select id="getList" resultType="org.eunsol.domain.PerformanceVO">
+		select * from performance
+	</select>
+	<insert id="insert">
+		insert into performance(num, photo, sname, name, period, ptime, vtime, grade, place, price, filename, uploadpath, fullname, alt)
+		values(seq_num.nextval, #{photo}, #{sname}, #{name}, #{period}, #{ptime}, #{vtime}, #{grade}, #{place}, #{price}, #{filename}, #{uploadpath},#{fullname}, #{alt})
+	</insert>
+	<select id="read" resultType="org.eunsol.domain.PerformanceVO">
+		select * from performance where num = #{num}
+	</select>
+</mapper>

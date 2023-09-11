@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTO Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.eunsol.mapper.GalleryBoardMapper">
+<!-- id는 GalleryBarodMapper의 이름이랑 같이 주면 된다! 
+-->
+<!--  <select id="getList" resultType="org.eunsol.domain.GalleryBoardVO">
+		select * from galleryboard
+	</select>-->
+		<insert id="insert">
+		insert into galleryboard(gno, title, writer, content, filename, uploadpath, fullname)
+		values(gal_seq.nextval, #{title}, #{writer}, #{content}, #{filename}, #{uploadpath}, #{fullname})
+	</insert>
+	<select id="read" resultType="org.eunsol.domain.GalleryBoardVO">
+		select * from galleryboard where gno = #{gno}
+	</select>
+	<delete id="delete"> 
+		delete from galleryboard where gno = #{gno}
+	</delete>
+	<update id="update">
+		update galleryboard set title = #{title},
+		writer = #{writer},
+		content = #{content},
+		filename = #{filename},
+		uploadpath = #{uploadpath},
+	    fullname = #{fullname} where gno = #{gno}
+	</update>
+	<select id="getTotalCount" resultType="int">
+		select count(*) from galleryboard	
+		<trim prefix="where (" suffix=")">
+				<if test="typeArr != null">
+					<foreach item='type' collection="typeArr"  separator="or">
+						<choose>
+							<when test="type == 'T'.toString()">
+								title like '%'||#{keyword}||'%'
+							</when>
+							<when test="type == 'C'.toString()">
+								content like '%'||#{keyword}||'%'
+							</when>
+							<when test="type == 'W'.toString()">
+								 writer like '%'||#{keyword}||'%'
+							</when>
+						</choose>
+					</foreach>
+				</if>
+			</trim>	
+	</select>
+	<select id="getList" resultType="org.eunsol.domain.GalleryBoardVO">
+		select * from
+		( select Tb.*, rownum rNum2 from ( select * from galleryboard 
+			<trim prefix="where (" suffix=")">
+				<if test="typeArr != null">
+					<foreach item='type' collection="typeArr"  separator="or">
+						<choose>
+							<when test="type == 'T'.toString()">
+								title like '%'||#{keyword}||'%'
+							</when>
+							<when test="type == 'C'.toString()">
+								content like '%'||#{keyword}||'%'
+							</when>
+							<when test="type == 'W'.toString()">
+								 writer like '%'||#{keyword}||'%'
+							</when>
+						</choose>
+					</foreach>
+				</if>
+			</trim>
+		order by gno desc ) Tb 
+		) where rNum2 between (#{pageNum}-1)*#{amount}+1 and #{pageNum}*#{amount}
+	</select>
+</mapper>

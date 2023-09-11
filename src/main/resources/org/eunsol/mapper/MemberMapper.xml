@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.eunsol.mapper.MemberMapper">
+	<resultMap type="org.eunsol.domain.MemberVO" id="memberMap">
+		<id property="id" column="id"/>
+		<result property="id" column="id"/>	
+		<result property="passwd" column="passwd"/>	
+		<result property="name" column="name"/>	
+		<result property="birth" column="birth"/>	
+		<result property="email" column="email"/>	
+		<result property="phone" column="phone"/>	
+		<result property="address" column="address"/>	
+		<collection property="authList" resultMap="authMap">
+		</collection>
+	</resultMap>
+	<resultMap type="org.eunsol.domain.Member_authVO" id="authMap">
+		<result property="id" column="id"/>
+		<result property="auth" column="auth"/>
+	</resultMap>
+	<insert id="insert">
+		insert into member(id, passwd, name, birth, gender, email, phone, address )
+		values(#{id}, #{passwd}, #{name}, #{birth}, #{gender}, #{email}, #{phone}, #{address})
+	</insert>
+	<select id="getList" resultType="org.eunsol.domain.MemberVO">
+      select * from member
+   </select>
+   <select id ="read" resultMap="memberMap">
+		select 
+		mem.id, passwd, name, birth, gender, email, phone, address, enabled, auth
+		from member mem left outer join member_auth auth
+		on mem.id = auth.id
+		where mem.id =#{id}
+	</select>
+</mapper>
